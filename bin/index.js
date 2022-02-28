@@ -8,7 +8,6 @@ const yargs = require("yargs");
 // }
 
 // var sentence = parseSentence(yargs.argv._);
-// sa
 const parameters = yargs.argv._;
 if (parameters[0]) {
     if (parameters[0] === 'component') {
@@ -18,24 +17,39 @@ if (parameters[0]) {
         if (path) {
             fs.mkdir(path, {recursive: true}, (err) => {
                 if (err) throw err;
-                createComponentFiles(path);
+                createComponentFiles(path, componentName);
             });
         }
-    }
-    if (parameters[0] === 'read') {
-        fs.readFile('src/app.module.ts', 'utf8' , (err, data) => {
+
+        // if (parameters[0] === 'read') {
+        fs.readFile('src/app.module.ts', 'utf8', (err, data) => {
             if (err) {
                 console.error(err)
                 return
             }
-            console.log(data)
+            const cmoduleIndex = data.indexOf('@CModule');
+            data = data.substring(0, cmoduleIndex) +
+                `import {${capitalizeFirstLetter(componentName + 'Component')}} from "./${parameters[1].substr(0, parameters[1].length - componentName.length) + componentName + '/' + componentName}.component";
+            ` + data.substring(cmoduleIndex, data.length);
+            const declarationIndex = data.indexOf('declarations');
+            for (var i = declarationIndex; i < data.length; i++) {
+                if (data.charAt(i) === ']') {
+                    console.log(i);
+                    data = data.substring(0, i) + ',' + capitalizeFirstLetter(componentName + 'Component') + data.substring(i, data.length);
+                    console.log(data);
+                    fs.writeFileSync('src/app.module.ts',data);
+
+                    return;
+                }
+            }
+
+
         })
     }
 }
 
 
-
-function createComponentFiles(path) {
+function createComponentFiles(path, componentName) {
     fs.writeFile(path + componentName + ".component.ts",
         `import {Component} from "../../@cinera/component";
 
