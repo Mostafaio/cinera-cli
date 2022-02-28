@@ -8,6 +8,7 @@ const yargs = require("yargs");
 // }
 
 // var sentence = parseSentence(yargs.argv._);
+// sa
 const parameters = yargs.argv._;
 if (parameters[0]) {
     if (parameters[0] === 'component') {
