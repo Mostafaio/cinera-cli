@@ -1,0 +1,17 @@
+{
+  "name": "cinera-cli",
+  "version": "1.0.0",
+  "description": "cinera cli",
+  "main": "bin/index.js",
+  "scripts": {
+    "test": "cinera"
+  },
+  "author": "",
+  "license": "ISC",
+  "bin": {
+    "cin": "./bin/index.js"
+  },
+  "dependencies": {
+    "yargs": "^17.3.1"
+  }
+}
