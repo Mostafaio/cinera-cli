@@ -46,6 +46,87 @@ if (parameters[0]) {
 
         })
     }
+    if (parameters[0] === 'service') {
+        let serviceName = parameters[1].split('/');
+        serviceName = serviceName[serviceName.length - 1];
+        const path = 'src/' + parameters[1].substr(0, parameters[1].length - serviceName.length);
+        if (path) {
+            fs.mkdir(path, {recursive: true}, (err) => {
+                if (err) throw err;
+                createServiceFile(path, serviceName);
+            });
+        }
+    }
+    if (parameters[0] === 'model') {
+        let modelName = parameters[1].split('/');
+        modelName = modelName[modelName.length - 1];
+        const path = 'src/' + parameters[1].substr(0, parameters[1].length - modelName.length);
+        if (path) {
+            fs.mkdir(path, {recursive: true}, (err) => {
+                if (err) throw err;
+                createModelFile(path, modelName);
+            });
+        }
+    }
+    if (parameters[0] === 'module') {
+        let moduleName = parameters[1].split('/');
+        moduleName = moduleName[moduleName.length - 1];
+        const path = 'src/' + parameters[1].substr(0, parameters[1].length - moduleName.length);
+        if (path) {
+            fs.mkdir(path, {recursive: true}, (err) => {
+                if (err) throw err;
+                createModuleFile(path, moduleName);
+            });
+        }
+    }
+}
+
+function createModuleFile(path, moduleName) {
+    fs.writeFile(path + moduleName + ".module.ts",
+        `export class ${capitalizeFirstLetter(moduleName)}Module {
+
+    constructor() {
+    }
+}`,
+        function (err) {
+            if (err) {
+                return console.log(err);
+            }
+            console.log("The file was saved!");
+        });
+}
+
+function createModelFile(path, modelName) {
+    fs.writeFile(path + modelName + ".model.ts",
+        `export class ${capitalizeFirstLetter(modelName)}Model {
+
+    constructor() {
+    }
+}`,
+        function (err) {
+            if (err) {
+                return console.log(err);
+            }
+            console.log("The file was saved!");
+        });
+}
+
+function createServiceFile(path, serviceName) {
+    fs.writeFile(path + serviceName + ".service.ts",
+        `import {Injectable} from "../../../@cinera/injectable";
+
+@Injectable()
+export class ${capitalizeFirstLetter(serviceName)}Service {
+
+    constructor() {
+    }
+}`,
+        function (err) {
+            if (err) {
+                return console.log(err);
+            }
+            console.log("The file was saved!");
+        });
 }
 
 
